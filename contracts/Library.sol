@@ -18,7 +18,7 @@ contract Library is Owner {
     mapping(uint256 => mapping(address => int16)) borrowers; // -1 currentborrow, 0 never, 1 unborrowed but was borrowed
 
     modifier validBookId(uint256 _bookId) {
-        require(allBooks.length > _bookId, "Invalid book ID");
+        require(allBooks.length > _bookId, "Book does not exist");
         _;
     }
 
@@ -49,10 +49,10 @@ contract Library is Owner {
     }
 
     function borrowBook(uint256 _bookId) public validBookId(_bookId) {
-        require(allBooks[_bookId].copies > 0, "Book not available");
+        require(allBooks[_bookId].copies > 0, "No copies available");
         require(
             borrowers[_bookId][msg.sender] != -1,
-            "Cant borrow same book twice"
+            "Book already borrowed"
         );
 
         if (borrowers[_bookId][msg.sender] == 0) {
@@ -65,7 +65,7 @@ contract Library is Owner {
     }
 
     function returnBook(uint256 _bookId) public validBookId(_bookId) {
-        require(borrowers[_bookId][msg.sender] == -1, "Book was not borrowed");
+        require(borrowers[_bookId][msg.sender] == -1, "Book not borrowed");
 
         borrowers[_bookId][msg.sender] = 2;
 
