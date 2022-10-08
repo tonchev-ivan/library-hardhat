@@ -9,7 +9,7 @@ contract Library is Owner {
     }
 
     Book[] allBooks;
-    
+
     uint256[] bookAvailability;
     mapping(uint256 => uint256) bookAvailabilityIndex;
     mapping(uint256 => bool) bookAvailabilityExists;
@@ -52,7 +52,7 @@ contract Library is Owner {
         require(allBooks[_bookId].copies > 0, "No copies available");
         require(
             borrowers[_bookId][msg.sender] != -1,
-            "Book already borrowed"
+            "You already borrowed this book"
         );
 
         if (borrowers[_bookId][msg.sender] == 0) {
@@ -65,7 +65,10 @@ contract Library is Owner {
     }
 
     function returnBook(uint256 _bookId) public validBookId(_bookId) {
-        require(borrowers[_bookId][msg.sender] == -1, "Book not borrowed");
+        require(
+            borrowers[_bookId][msg.sender] == -1,
+            "You did not borrow this book"
+        );
 
         borrowers[_bookId][msg.sender] = 2;
 
