@@ -1,17 +1,10 @@
-language: node_js
-
-node_js:
-  - 16.16.0
-
-cache: npm
-
 steps:
   - checkout
   - run: npm install
-  - run: npm install --save-dev hardhat
-  - run: npx hardhat compile
+  - run: npx hardhat test
+  - run: npx codechecks
 
 # Travis
 script:
-  - npx hardhat test
+  - npm hardhat test
   - npx codechecks
