@@ -1,0 +1,10 @@
+steps:
+  - checkout
+  - run: npm install
+  - run: npx hardhat test
+  - run: npx codechecks
+
+# Travis
+script:
+  - npm hardhat test
+  - npx codechecks
