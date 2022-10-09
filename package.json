@@ -10,9 +10,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@codechecks/client": "^0.1.12",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.3",
     "@types/chai": "^4.3.3",
-    "@types/mocha": "^10.0.0",
+    "@types/mocha": "^9.1.0",
     "@types/node": "^18.8.3",
     "chai": "^4.3.6",
     "hardhat": "^2.11.2",
