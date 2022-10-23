@@ -1,8 +1,8 @@
 pragma solidity >=0.7.0 <0.9.0;
 
-import "./Owner.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract Library is Owner {
+contract Library is Ownable {
     struct Book {
         uint256 copies;
         string name;
@@ -22,7 +22,7 @@ contract Library is Owner {
         _;
     }
 
-    function addNewBook(string memory _name, uint256 _copies) public isOwner {
+    function addNewBook(string memory _name, uint256 _copies) public onlyOwner {
         allBooks.push(Book(_copies, _name));
         borrowersHistory.push(new address[](0));
         uint256 bookId = allBooks.length - 1;
@@ -33,7 +33,7 @@ contract Library is Owner {
 
     function changeNumberOfBookCopies(uint256 _bookId, uint256 _copies)
         public
-        isOwner
+        onlyOwner
         validBookId(_bookId)
     {
         allBooks[_bookId].copies = _copies;
