@@ -1,4 +1,7 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("@nomiclabs/hardhat-ethers");
+require('dotenv').config();
+require("@nomiclabs/hardhat-etherscan");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -12,4 +15,16 @@ module.exports = {
     coinmarketcap: process.env.COINMARKETCAP_TOKEN,
     maxMethodDiff: 25,
   },
+  networks: {
+    hardhat: {},
+    goerli: {
+      url: process.env.API_URL,
+      accounts: [`0x${process.env.PRIVATE_KEY}`]
+    }
+  },
+  etherscan: {
+    apiKey: {
+      goerli: process.env.ETHERSCAN_API_KEY,
+    },
+  }
 };
