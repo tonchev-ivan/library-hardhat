@@ -12,9 +12,11 @@ describe("Library", function () {
 		'bookAlreadyBorrowed': 'You already borrowed this book',
 		'bookNotBorrowed': 'You did not borrow this book',
 	};
+	let owner, addr1, addr2;
 
 	beforeEach(async function () {
 		testContract = await (await hre.ethers.getContractFactory("Library")).deploy();
+		[owner, addr1, addr2] = await hre.ethers.getSigners();
 	});
 
 	describe("addNewBook", function () {
@@ -26,6 +28,10 @@ describe("Library", function () {
 		it("Should not create a book with 0 availability", function () {
 			testContract.addNewBook(bookName, 0);
 			expect(testContract.getAvailableBooks().length == 0);
+		});
+
+		it("Should not create a book if caller is not owner", async function () {
+			expect(testContract.connect(addr1).addNewBook(bookName, 1)).to.be.rejectedWith('');
 		});
 	});
 
@@ -51,6 +57,10 @@ describe("Library", function () {
 		it(`should revert trx when changing non-existing book copies with error: ${errors.invalidBookId}`, function () {
 			expect(testContract.changeNumberOfBookCopies(0, 11)).to.be.rejectedWith(errors.invalidBookId);
 		});
+
+		it("Should not change a book copies if caller is not owner", async function () {
+			expect(testContract.connect(addr1).changeNumberOfBookCopies(0, 11)).to.be.rejectedWith('');
+		});
 	});
 
 	describe("borrowBook", function () {
@@ -75,6 +85,15 @@ describe("Library", function () {
 			testContract.borrowBook(0);
 			expect(testContract.getAvailableBooks().length == 0);
 		});
+
+		it("should be able to change bookCopies to 0 even if last book was borrowed", function () {
+			testContract.addNewBook(bookName, 1);
+			testContract.borrowBook(0);
+			expect(testContract.getAvailableBooks().length == 0);
+
+			testContract.changeNumberOfBookCopies(0, 0);
+			expect(testContract.getAvailableBooks().length == 1);
+		});
 	});
 
 	describe("returnBook", function () {
@@ -85,6 +104,15 @@ describe("Library", function () {
 
 			testContract.returnBook(0);
 			expect(testContract.getAvailableBooks().length == 1);
+		});
+
+		it("should not change book availability if available book coopy was returned", function () {
+			testContract.addNewBook(bookName, 2);
+			testContract.borrowBook(0);
+			expect(testContract.getAvailableBooks().length == 1);
+
+			testContract.returnBook(0);
+			expect(testContract.getAvailableBooks().length == 2);
 		});
 
 		it(`should revert trx when returning non existing book with error: ${errors.invalidBookId}`, function () {

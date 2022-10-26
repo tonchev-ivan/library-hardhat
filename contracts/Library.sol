@@ -102,10 +102,8 @@ contract Library is Ownable {
     }
 
     function addBookAvailability(uint256 _bookId) internal {
-        if (!bookAvailabilityExists[_bookId]) {
-            bookAvailability.push(_bookId);
-            bookAvailabilityExists[_bookId] = true;
-            bookAvailabilityIndex[_bookId] = bookAvailability.length - 1;
-        }
+        bookAvailability.push(_bookId);
+        bookAvailabilityExists[_bookId] = true;
+        bookAvailabilityIndex[_bookId] = bookAvailability.length - 1;
     }
 }
