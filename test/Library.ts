@@ -145,4 +145,53 @@ describe("Library", function () {
 			expect(testContract.getBookBorrowers(0)).to.be.rejectedWith(errors.invalidBookId);
 		});
 	});
+
+	describe("getBookBorrowerState", function () {
+		it("should show book borrower state 0", function () {
+			testContract.addNewBook(bookName, 1);
+			expect(testContract.getBookBorrowerState(0) == 0);
+		});
+
+		it("should show book borrower state 1", function () {
+			testContract.addNewBook(bookName, 1);
+			testContract.borrowBook(0);
+			expect(testContract.getBookBorrowerState(0) == 1);
+		});
+
+		it("should show book borrower state -1", function () {
+			testContract.addNewBook(bookName, 1);
+			testContract.borrowBook(0);
+			testContract.returnBook(0);
+			expect(testContract.getBookBorrowerState(0) == -1);
+		});
+
+		it(`should revert trx when calling function for non existing book with error: ${errors.invalidBookId}`, function () {
+			expect(testContract.getBookBorrowerState(0)).to.be.rejectedWith(errors.invalidBookId);
+		});
+	});
+
+	describe("getBookAvailableCopies", function () {
+		it("should show 0 available copies", function () {
+			testContract.addNewBook(bookName, 1);
+			testContract.borrowBook(0);
+			expect(testContract.getBookAvailableCopies(0) == 0);
+		});
+
+		it("should show 1 available copies", function () {
+			testContract.addNewBook(bookName, 2);
+			testContract.borrowBook(0);
+			expect(testContract.getBookAvailableCopies(0) == 1);
+		});
+
+		it("should show 2 available copies", function () {
+			testContract.addNewBook(bookName, 2);
+			expect(testContract.getBookAvailableCopies(0) == 2);
+		});
+
+		it(`should revert trx when calling function for non existing book with error: ${errors.invalidBookId}`, function () {
+			expect(testContract.getBookAvailableCopies(0)).to.be.rejectedWith(errors.invalidBookId);
+		});
+	}
+	);
+
 });

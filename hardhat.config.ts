@@ -18,6 +18,7 @@ module.exports = {
   networks: {
     hardhat: {},
     goerli: {
+      allowUnlimitedContractSize: true,
       url: process.env.API_URL,
       accounts: [`0x${process.env.PRIVATE_KEY}`]
     }

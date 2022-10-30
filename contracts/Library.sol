@@ -70,7 +70,7 @@ contract Library is Ownable {
             "You did not borrow this book"
         );
 
-        borrowers[_bookId][msg.sender] = 2;
+        borrowers[_bookId][msg.sender] = 1;
 
         if (++allBooks[_bookId].copies == 1) {
             addBookAvailability(_bookId);
@@ -84,6 +84,24 @@ contract Library is Ownable {
         returns (address[] memory)
     {
         return borrowersHistory[_bookId];
+    }
+
+    function getBookBorrowerState(uint256 _bookId)
+        public
+        view
+        validBookId(_bookId)
+        returns (int16)
+    {
+        return borrowers[_bookId][msg.sender];
+    }
+
+    function getBookAvailableCopies(uint256 _bookId)
+        public
+        view
+        validBookId(_bookId)
+        returns (uint256)
+    {
+        return allBooks[_bookId].copies;
     }
 
     function removeBookAvailability(uint256 _bookId) internal {
