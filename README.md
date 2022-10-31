@@ -9,8 +9,8 @@ npx hardhat test # using env var COINMARKETCAP_TOKEN
 npx hardhat coverage # coverage report
 npx codechecks
 
-# goerli deployment
-npx hardhat run --network localhost scripts/deploy.js
+# deployment
+npx hardhat run --network {localhost/goerli} scripts/deploy.js
 
 # interaction task
 npx hardhat interact --ntwrk local
