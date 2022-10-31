@@ -8,5 +8,11 @@ Try running some of the following tasks:
 npx hardhat test # using env var COINMARKETCAP_TOKEN
 npx hardhat coverage # coverage report
 npx codechecks
-npx hardhat run scripts/deploy.js
+
+# goerli deployment
+npx hardhat run --network localhost scripts/deploy.js
+
+# interaction task
+npx hardhat interact --ntwrk local
+npx hardhat interact --ntwrk goerli
 ```
